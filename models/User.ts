@@ -1,4 +1,4 @@
-import { CallbackError, Schema } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 
 /**
@@ -113,3 +113,15 @@ UserSchema.pre(/^find/, async function (next) {
     return next(error);
   }
 });
+
+UserSchema.methods.checkPassword = async function (input: string) {
+  try {
+    return await bcrypt.compare(input, this.password);
+  } catch (error) {
+    return error;
+  }
+};
+
+const User = model('User', UserSchema);
+
+export default User;
