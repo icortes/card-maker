@@ -16,6 +16,8 @@ import bcrypt from 'bcrypt';
 interface IUser {
   username: string;
   profile_image?: string;
+  firstname: string;
+  lastname: string;
   email: string;
   password: string;
   created_at: Date;
@@ -36,6 +38,16 @@ const UserSchema = new Schema<IUser>({
       },
       'Username too short. Must be 3 characters or more.',
     ],
+  },
+  firstname: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  lastname: {
+    type: String,
+    required: true,
+    trim: true,
   },
   email: {
     type: String,
