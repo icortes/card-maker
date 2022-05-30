@@ -43,4 +43,20 @@ const UserSchema = new Schema<IUser>({
     trim: true,
     match: [/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/, 'Bad email provided'],
   },
+  password: {
+    type: String,
+    required: true,
+    // validation is done within pre-hooks
+  },
+  created_at: {
+    type: Date,
+    default: Date.now,
+  },
+  updated_at: {
+    type: Date,
+    default: Date.now,
+  },
+  profile_image: {
+    type: String,
+  },
 });
