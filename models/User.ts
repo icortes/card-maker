@@ -1,4 +1,5 @@
-import { Schema } from 'mongoose';
+import { CallbackError, Schema } from 'mongoose';
+import bcrypt from 'bcrypt';
 
 /**
  * This is the Interface for the User Schema.
@@ -69,4 +70,24 @@ const UserSchema = new Schema<IUser>({
     type: Schema.Types.ObjectId,
     ref: 'Connections',
   },
+});
+
+UserSchema.pre('save', async function (next) {
+  try {
+    const regex =
+      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
+    if (!this.password.match(regex)) {
+      return next(new Error('Password failed validation.'));
+    }
+
+    if (/\s/g.test(this.username)) {
+      return next(new Error('Username must not contain spaces.'));
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    return next();
+  } catch (error: any) {
+    return next(error);
+  }
 });
