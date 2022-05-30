@@ -2,6 +2,7 @@ import { Schema } from 'mongoose';
 
 /**
  * This is the Interface for the User Schema.
+ * @interface
  * @property {string} username - A unique name chosen by the user.
  * @property {string} profile_image - The url for the user's profile image.
  * @property {string} email - the email of the user to log in
@@ -13,11 +14,26 @@ import { Schema } from 'mongoose';
  */
 interface IUser {
   username: string;
-  profile_image: string;
+  profile_image?: string;
   email: string;
   password: string;
   created_at: Date;
   updated_at: Date;
-  links: Schema.Types.ObjectId;
-  connections: Schema.Types.ObjectId;
+  links?: Schema.Types.ObjectId;
+  connections?: Schema.Types.ObjectId;
 }
+
+const UserSchema = new Schema<IUser>({
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    validate: [
+      function (this: IUser) {
+        return this.username.length > 2;
+      },
+      'Username too short. Must be 3 characters or more.',
+    ],
+  },
+});
