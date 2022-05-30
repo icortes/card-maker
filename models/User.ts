@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, models } from 'mongoose';
 import bcrypt from 'bcrypt';
 
 /**
@@ -124,4 +124,4 @@ UserSchema.methods.checkPassword = async function (input: string) {
 
 const User = model('User', UserSchema);
 
-export default User;
+export default models.User || User;
