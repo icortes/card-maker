@@ -36,4 +36,11 @@ const UserSchema = new Schema<IUser>({
       'Username too short. Must be 3 characters or more.',
     ],
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    match: [/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/, 'Bad email provided'],
+  },
 });
