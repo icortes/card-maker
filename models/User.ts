@@ -59,4 +59,14 @@ const UserSchema = new Schema<IUser>({
   profile_image: {
     type: String,
   },
+  links: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Link',
+    },
+  ],
+  connections: {
+    type: Schema.Types.ObjectId,
+    ref: 'Connections',
+  },
 });
