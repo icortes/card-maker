@@ -91,3 +91,25 @@ UserSchema.pre('save', async function (next) {
     return next(error);
   }
 });
+
+UserSchema.pre(/^find/, async function (next) {
+  try {
+    const user = this;
+    if (!user.getChanges().password) return next();
+
+    const regex =
+      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
+    if (!user.password.match(regex)) {
+      return next(new Error('New password failed validation'));
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    user.getChanges().password = await bcrypt.hash(
+      user.getChanges().password,
+      salt
+    );
+    return next();
+  } catch (error: any) {
+    return next(error);
+  }
+});
