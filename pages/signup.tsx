@@ -10,9 +10,13 @@ import {
   Typography,
 } from '@mui/material';
 import { LockOutlined } from '@mui/icons-material/';
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
+import { useUser } from '../lib/hooks';
 
 export default function SignupPage() {
+  const [user, { mutate }] = useUser();
+  const [errorMsg, setErrorMsg] = useState('');
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -25,6 +29,11 @@ export default function SignupPage() {
       password: data.get('password'),
       rpassword: data.get('rpassword')
     };
+
+    if (body.password !== body.rpassword) {
+      setErrorMsg(`The passwords don't match.`);
+      return;
+    }
 
     console.log(body);
   };
