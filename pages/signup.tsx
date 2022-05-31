@@ -16,6 +16,7 @@ import { useUser } from '../lib/hooks';
 export default function SignupPage() {
   const [user, { mutate }] = useUser();
   const [errorMsg, setErrorMsg] = useState('');
+  const [errorProp, setErrorProp] = useState(false);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -32,6 +33,7 @@ export default function SignupPage() {
 
     if (body.password !== body.rpassword) {
       setErrorMsg(`The passwords don't match.`);
+      setErrorProp(true);
       return;
     }
 
@@ -102,6 +104,7 @@ export default function SignupPage() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                error={errorProp}
                 required
                 fullWidth
                 name='password'
@@ -109,16 +112,19 @@ export default function SignupPage() {
                 type='password'
                 id='password'
                 autoComplete='new-password'
+                helperText={errorMsg}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
+                error={errorProp}
                 required
                 fullWidth
                 name='rpassword'
                 label='Repeat Password'
                 type='password'
                 id='rpassword'
+                helperText={errorMsg}
               />
             </Grid>
           </Grid>
