@@ -16,10 +16,17 @@ export default function SignupPage() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+
+    let body = {
+      firstName: data.get('firstName'),
+      lastName: data.get('lastName'),
+      userName: data.get('userName'),
       email: data.get('email'),
       password: data.get('password'),
-    });
+      rpassword: data.get('rpassword')
+    };
+
+    console.log(body);
   };
   return (
     <Container component={'main'} maxWidth='xs'>
@@ -93,6 +100,16 @@ export default function SignupPage() {
                 type='password'
                 id='password'
                 autoComplete='new-password'
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name='rpassword'
+                label='Repeat Password'
+                type='password'
+                id='rpassword'
               />
             </Grid>
           </Grid>
