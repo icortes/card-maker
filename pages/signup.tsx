@@ -11,10 +11,8 @@ import {
 } from '@mui/material';
 import { LockOutlined } from '@mui/icons-material/';
 import { FormEvent, useState } from 'react';
-import { useUser } from '../lib/hooks';
 
 export default function SignupPage() {
-  const [user, { mutate }] = useUser();
   const [errorMsg, setErrorMsg] = useState('');
   const [errorProp, setErrorProp] = useState(false);
 
@@ -28,7 +26,7 @@ export default function SignupPage() {
       userName: data.get('userName'),
       email: data.get('email'),
       password: data.get('password'),
-      rpassword: data.get('rpassword')
+      rpassword: data.get('rpassword'),
     };
 
     if (body.password !== body.rpassword) {
