@@ -11,12 +11,13 @@ import {
 } from '@mui/material';
 import { LockOutlined } from '@mui/icons-material/';
 import { FormEvent, useState } from 'react';
+import { supabase } from '../lib/initSupabase';
 
 export default function SignupPage() {
   const [errorMsg, setErrorMsg] = useState('');
   const [errorProp, setErrorProp] = useState(false);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
@@ -26,16 +27,30 @@ export default function SignupPage() {
       userName: data.get('userName'),
       email: data.get('email'),
       password: data.get('password'),
-      rpassword: data.get('rpassword'),
     };
 
-    if (body.password !== body.rpassword) {
+    let rpassword = data.get('rpassword');
+
+    if (body.password !== rpassword) {
       setErrorMsg(`The passwords don't match.`);
       setErrorProp(true);
       return;
     }
 
-    console.log(body);
+    let { user, error } = await supabase.auth.signUp(
+      {
+        email: body.email,
+        password: body.password,
+      },
+      {
+        data: {
+          firstName: data.get('firstName'),
+          lastName: data.get('lastName'),
+          userName: data.get('userName'),
+        },
+      }
+    );
+    console.log(user);
   };
   return (
     <Container component={'main'} maxWidth='xs'>
