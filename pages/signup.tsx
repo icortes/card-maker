@@ -12,6 +12,7 @@ import {
 import { LockOutlined } from '@mui/icons-material/';
 import { FormEvent, useState } from 'react';
 import { supabase } from '../lib/initSupabase';
+import Router from 'next/router';
 
 export default function SignupPage() {
   const [errorMsg, setErrorMsg] = useState('');
@@ -25,8 +26,8 @@ export default function SignupPage() {
       firstName: data.get('firstName'),
       lastName: data.get('lastName'),
       userName: data.get('userName'),
-      email: data.get('email'),
-      password: data.get('password'),
+      email: data.get('email')?.toString(),
+      password: data.get('password')?.toString(),
     };
 
     let rpassword = data.get('rpassword');
@@ -48,9 +49,12 @@ export default function SignupPage() {
           lastName: data.get('lastName'),
           userName: data.get('userName'),
         },
-      }
+        redirectTo: '/'
+      },
     );
     console.log(user);
+    
+    Router.push('/');
   };
   return (
     <Container component={'main'} maxWidth='xs'>
