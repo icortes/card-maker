@@ -10,11 +10,27 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import Router from 'next/router';
 import { FormEvent } from 'react';
+import { supabase } from '../lib/initSupabase';
 
 export default function SigninPage() {
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    const data = new FormData(event.currentTarget);
+
+    let email = data.get('email')?.toString();
+    let password = data.get('password')?.toString();
+
+    const { user, error } = await supabase.auth.signIn({
+      email,
+      password,
+    });
+
+    console.log(user);
+
+    Router.push('/');
   };
 
   return (
